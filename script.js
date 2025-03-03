@@ -1,4 +1,4 @@
-const backendURL = "https://adeudosback-production.up.railway.app/api/personas";
+const backendURL = "https://adeudosback-production.up.railway.app";
 
 // ✅ Modificar cantidad y guardar historial
 document.getElementById("modificarBtn").addEventListener("click", async () => {
