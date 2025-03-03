@@ -68,23 +68,23 @@ window.addEventListener("DOMContentLoaded", () => {
 document.getElementById("modificarBtn").addEventListener("click", async () => {
     const id = document.getElementById("personaSelect").value;
     const selectedOption = document.getElementById("personaSelect").selectedOptions[0].textContent;
-    const nombre = selectedOption.split(" - ")[0]; // 📌 Extraemos el nombre del Select
+    const nombre = selectedOption.split(" - ")[0]; 
     const cantidad = parseFloat(document.getElementById("modCantidad").value);
     const accion = document.getElementById("accion").value;
-    const fecha = new Date().toISOString().split("T")[0]; // 📌 Formato YYYY-MM-DD
+    const fecha = document.getElementById("fecha").value; // 📌 Fecha tomada del formulario
 
-    if (!id || isNaN(cantidad) || !nombre) {
-        alert("Selecciona una persona y escribe una cantidad válida");
+    if (!id || isNaN(cantidad) || !nombre || !fecha) {
+        alert("Selecciona una persona, cantidad y fecha válida");
         return;
     }
 
-    console.log("📤 Modificando persona:", { id, cantidad, accion });
+    console.log("📤 Modificando persona:", { id, cantidad, accion, fecha });
 
     // ✅ 1️⃣ Modificar la persona en la tabla `personas`
     const res = await fetch(`https://adeudosback-production.up.railway.app/api/personas/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cantidad, accion })
+        body: JSON.stringify({ nombre, cantidad, accion, fecha })
     });
 
     if (!res.ok) {
@@ -92,18 +92,7 @@ document.getElementById("modificarBtn").addEventListener("click", async () => {
         return;
     }
 
-    console.log("✅ Persona modificada con éxito.");
-
-    // ✅ 2️⃣ Guardar en historial
-    console.log("📤 Guardando en historial:", { nombre, tipo: accion, cantidad, fecha });
-
-    await fetch(`https://adeudosback-production.up.railway.app/api/personas/historial`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nombre, tipo: accion, cantidad, fecha })
-    });
-
-    alert("Modificación guardada en historial!");
+    alert("✅ Modificación guardada en historial!");
     location.reload();
 });
 
