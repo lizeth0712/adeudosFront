@@ -1,4 +1,4 @@
-const backendURL = "https://registro-adeudos.up.railway.app/api/personas"; // CAMBIAR POR TU URL
+const backendURL = "https://adeudosback-production.up.railway.app/api/personas";
 
 // Función para registrar una nueva persona
 document.getElementById("registroForm").addEventListener("submit", async (e) => {
