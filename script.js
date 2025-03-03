@@ -78,17 +78,36 @@ document.getElementById("modificarBtn").addEventListener("click", async () => {
         return;
     }
 
-    console.log("📤 Enviando modificación:", { id, nombre, cantidad, accion, fecha });
+    console.log("📤 Modificando persona:", { id, cantidad, accion });
 
-    await fetch(`https://adeudosback-production.up.railway.app/api/personas/${id}`, {
+    // ✅ 1️⃣ Modificar la persona en la tabla `personas`
+    const res = await fetch(`https://adeudosback-production.up.railway.app/api/personas/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nombre, cantidad, accion, fecha })
+        body: JSON.stringify({ cantidad, accion })
+    });
+
+    if (!res.ok) {
+        alert("❌ Error al modificar la persona");
+        return;
+    }
+
+    console.log("✅ Persona modificada con éxito.");
+
+    // ✅ 2️⃣ Guardar en historial
+    console.log("📤 Guardando en historial:", { nombre, tipo: accion, cantidad, fecha });
+
+    await fetch(`https://adeudosback-production.up.railway.app/api/personas/historial`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre, tipo: accion, cantidad, fecha })
     });
 
     alert("Modificación guardada en historial!");
     location.reload();
 });
+
+
 
 // ✅ Buscar historial por nombre
 document.getElementById("buscarHistorialBtn").addEventListener("click", async () => {
