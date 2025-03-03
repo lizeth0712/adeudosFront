@@ -1,5 +1,7 @@
 const backendURL = "https://adeudosback-production.up.railway.app/api/personas";
 
+// Llamar a la función al cargar la página
+window.addEventListener("DOMContentLoaded", cargarPersonas);
 document.getElementById("registroForm").addEventListener("submit", async (e) => {
     e.preventDefault();
     console.log("hola")
@@ -90,5 +92,4 @@ document.getElementById("buscarHistorialBtn").addEventListener("click", async ()
     });
 });
 
-// Llamar a la función al cargar la página
-window.addEventListener("DOMContentLoaded", cargarPersonas);
+
