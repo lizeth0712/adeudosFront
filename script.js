@@ -110,6 +110,7 @@ document.getElementById("modificarBtn").addEventListener("click", async () => {
 
 
 
+
 // ✅ Buscar historial por nombre
 document.getElementById("buscarHistorialBtn").addEventListener("click", async () => {
     const nombre = document.getElementById("nombreHistorial").value.trim();
