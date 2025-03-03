@@ -30,6 +30,28 @@ document.getElementById("registroForm").addEventListener("submit", async (e) => 
         alert("Error al registrar persona");
     }
 });
+// ✅ Obtener personas y llenar el select
+async function cargarPersonas() {
+    try {
+        const res = await fetch(`${backendURL}`);
+        if (!res.ok) throw new Error("Error al obtener personas");
+
+        const personas = await res.json();
+        console.log("📥 Personas obtenidas:", personas); // 🔥 Agregado para depuración
+
+        const select = document.getElementById("personaSelect");
+        select.innerHTML = ""; // Limpiar el select antes de agregar opciones
+
+        personas.forEach(persona => {
+            const option = document.createElement("option");
+            option.value = persona.id;
+            option.textContent = `${persona.nombre} - $${persona.cantidad}`;
+            select.appendChild(option);
+        });
+    } catch (error) {
+        console.error("❌ Error al cargar personas:", error);
+    }
+}
 
 
 // ✅ Modificar cantidad y guardar historial
@@ -67,3 +89,6 @@ document.getElementById("buscarHistorialBtn").addEventListener("click", async ()
         historialDiv.innerHTML += `<p>${mod.fecha} - ${mod.tipo} $${mod.cantidad}</p>`;
     });
 });
+
+// Llamar a la función al cargar la página
+window.addEventListener("DOMContentLoaded", cargarPersonas);
