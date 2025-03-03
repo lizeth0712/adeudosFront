@@ -1,8 +1,8 @@
-const backendURL = "https://adeudosback-production.up.railway.app";
+const backendURL = "https://adeudosback-production.up.railway.app/api/personas";
 
 document.getElementById("registroForm").addEventListener("submit", async (e) => {
     e.preventDefault();
-
+    console.log("hola")
     const nombre = document.getElementById("nombre").value;
     const cantidad = parseFloat(document.getElementById("cantidad").value);
     const fecha = document.getElementById("fecha").value;
