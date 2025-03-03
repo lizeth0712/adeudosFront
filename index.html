@@ -9,7 +9,6 @@
 <body>
     <h1>Registro de Adeudos</h1>
 
-    <!-- Formulario para registrar personas -->
     <section>
         <h2>Registrar Persona</h2>
         <form id="registroForm">
@@ -23,7 +22,6 @@
         </form>
     </section>
 
-    <!-- Sección para modificar adeudos -->
     <section>
         <h2>Monitorear Personas</h2>
         <label for="personaSelect">Seleccionar Persona:</label>
@@ -39,11 +37,14 @@
         <input type="number" id="modCantidad" required>
         <button id="modificarBtn">Modificar</button>
     </section>
+
     <section>
-        <h2>Historial de Modificaciones</h2>
+        <h2>Buscar Historial de Modificaciones</h2>
+        <input type="text" id="nombreHistorial" placeholder="Escribe el nombre del cliente">
+        <button id="buscarHistorialBtn">Buscar</button>
         <div id="historial"></div>
     </section>
-    
+
     <script src="script.js"></script>
 </body>
 </html>
