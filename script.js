@@ -68,10 +68,10 @@ window.addEventListener("DOMContentLoaded", () => {
 document.getElementById("modificarBtn").addEventListener("click", async () => {
     const id = document.getElementById("personaSelect").value;
     const selectedOption = document.getElementById("personaSelect").selectedOptions[0].textContent;
-    const nombre = selectedOption.split(" - ")[0]; // 📌 Extraemos el nombre del Select
+    const nombre = selectedOption.split(" - ")[0];
     const cantidad = parseFloat(document.getElementById("modCantidad").value);
     const accion = document.getElementById("accion").value;
-    const fecha = new Date().toISOString().split("T")[0]; // 📌 Formato YYYY-MM-DD
+    const fecha = new Date().toISOString().split("T")[0];
 
     if (!id || isNaN(cantidad) || !nombre) {
         alert("Selecciona una persona y escribe una cantidad válida");
@@ -106,30 +106,3 @@ document.getElementById("modificarBtn").addEventListener("click", async () => {
     alert("Modificación guardada en historial!");
     location.reload();
 });
-
-
-
-
-
-// ✅ Buscar historial por nombre
-document.getElementById("buscarHistorialBtn").addEventListener("click", async () => {
-    const nombre = document.getElementById("nombreHistorial").value.trim();
-
-    if (!nombre) {
-        alert("Escribe un nombre para buscar en el historial");
-        return;
-    }
-
-    console.log(`🔍 Buscando historial de: ${nombre}`);
-
-    const res = await fetch(`https://adeudosback-production.up.railway.app/api/personas/historial/${nombre}`);
-    const modificaciones = await res.json();
-
-    const historialDiv = document.getElementById("historial");
-    historialDiv.innerHTML = "<h3>Historial de Modificaciones</h3>";
-
-    modificaciones.forEach(mod => {
-        historialDiv.innerHTML += `<p>${mod.fecha} - ${mod.tipo} $${mod.cantidad}</p>`;
-    });
-});
-
