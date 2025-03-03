@@ -1,8 +1,8 @@
-const backendURL = "https://adeudosback-production.up.railway.app/api/personas"; // Asegúrate de que sea la URL correcta
+const backendURL = "https://adeudosback-production.up.railway.app/api/personas"; // URL del backend
 
-// Función para registrar una nueva persona
+// ✅ Función para registrar una nueva persona
 document.getElementById("registroForm").addEventListener("submit", async (e) => {
-    e.preventDefault(); // Evitar que la página se recargue
+    e.preventDefault(); // Evita que la página se recargue
 
     const nombre = document.getElementById("nombre").value;
     const cantidad = parseFloat(document.getElementById("cantidad").value);
@@ -33,7 +33,7 @@ document.getElementById("registroForm").addEventListener("submit", async (e) => 
     }
 });
 
-// Función para cargar la lista de personas en el select
+// ✅ Función para cargar la lista de personas en el select
 async function cargarPersonas() {
     try {
         const res = await fetch(backendURL);
@@ -48,12 +48,17 @@ async function cargarPersonas() {
             option.textContent = `${p.nombre} - $${p.cantidad}`;
             select.appendChild(option);
         });
+
+        // Cargar historial de la primera persona en la lista si hay datos
+        if (personas.length > 0) {
+            cargarHistorial(personas[0].id);
+        }
     } catch (error) {
         console.error("Error al cargar personas:", error);
     }
 }
 
-// Función para modificar el adeudo de una persona
+// ✅ Función para modificar el adeudo de una persona
 document.getElementById("modificarBtn").addEventListener("click", async () => {
     const id = document.getElementById("personaSelect").value;
     const cantidad = parseFloat(document.getElementById("modCantidad").value);
@@ -84,12 +89,12 @@ document.getElementById("modificarBtn").addEventListener("click", async () => {
     }
 });
 
-async function cargarHistorial() {
-    const id = document.getElementById("personaSelect").value;
+// ✅ Función para cargar el historial de modificaciones de una persona
+async function cargarHistorial(id) {
     if (!id) return;
 
     try {
-        const res = await fetch(`https://adeudosback-production.up.railway.app/api/personas/${id}/modificaciones`);
+        const res = await fetch(`${backendURL}/${id}/modificaciones`);
         const modificaciones = await res.json();
 
         const historialDiv = document.getElementById("historial");
@@ -102,7 +107,7 @@ async function cargarHistorial() {
 
         modificaciones.forEach(mod => {
             const modTexto = document.createElement("p");
-            modTexto.textContent = `${mod.fecha}: ${mod.accion} $${mod.cantidad}`;
+            modTexto.textContent = `${new Date(mod.fecha).toLocaleString()}: ${mod.accion} $${mod.cantidad}`;
             historialDiv.appendChild(modTexto);
         });
     } catch (error) {
@@ -110,8 +115,11 @@ async function cargarHistorial() {
     }
 }
 
-// Cargar historial cada vez que se seleccione una persona
-document.getElementById("personaSelect").addEventListener("change", cargarHistorial);
+// ✅ Cargar historial cada vez que se seleccione una persona
+document.getElementById("personaSelect").addEventListener("change", (e) => {
+    const id = e.target.value;
+    cargarHistorial(id);
+});
 
-// Cargar la lista de personas al cargar la página
+// ✅ Cargar la lista de personas al cargar la página
 window.onload = cargarPersonas;
