@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Adeudos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Registro de Adeudos</h1>
+
+    <!-- Formulario para registrar personas -->
+    <section>
+        <h2>Registrar Persona</h2>
+        <form id="registroForm">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" required>
+            <label for="cantidad">Cantidad:</label>
+            <input type="number" id="cantidad" required>
+            <label for="fecha">Fecha:</label>
+            <input type="date" id="fecha" required>
+            <button type="submit">Registrar</button>
+        </form>
+    </section>
+
+    <!-- Sección para modificar adeudos -->
+    <section>
+        <h2>Monitorear Personas</h2>
+        <label for="personaSelect">Seleccionar Persona:</label>
+        <select id="personaSelect"></select>
+
+        <label for="accion">Acción:</label>
+        <select id="accion">
+            <option value="agregar">Agregar Dinero</option>
+            <option value="quitar">Quitar Dinero</option>
+        </select>
+
+        <label for="modCantidad">Cantidad:</label>
+        <input type="number" id="modCantidad" required>
+        <button id="modificarBtn">Modificar</button>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
