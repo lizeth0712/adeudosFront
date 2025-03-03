@@ -1,5 +1,37 @@
 const backendURL = "https://adeudosback-production.up.railway.app";
 
+document.getElementById("registroForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const nombre = document.getElementById("nombre").value;
+    const cantidad = parseFloat(document.getElementById("cantidad").value);
+    const fecha = document.getElementById("fecha").value;
+
+    if (!nombre || isNaN(cantidad) || !fecha) {
+        alert("Todos los campos son obligatorios");
+        return;
+    }
+
+    console.log("📤 Enviando datos:", { nombre, cantidad, fecha }); // <-- Verifica que los datos son correctos
+
+    try {
+        const res = await fetch("https://adeudosback-production.up.railway.app/api/personas", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nombre, cantidad, fecha })
+        });
+
+        if (!res.ok) throw new Error("Error en la respuesta del servidor");
+
+        alert("Persona registrada exitosamente!");
+        location.reload();
+    } catch (error) {
+        console.error("❌ Error al registrar:", error);
+        alert("Error al registrar persona");
+    }
+});
+
+
 // ✅ Modificar cantidad y guardar historial
 document.getElementById("modificarBtn").addEventListener("click", async () => {
     const id = document.getElementById("personaSelect").value;
