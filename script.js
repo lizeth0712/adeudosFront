@@ -1,7 +1,7 @@
 const backendURL = "https://adeudosback-production.up.railway.app/api/personas";
 
-// Llamar a la función al cargar la página
-window.addEventListener("DOMContentLoaded", cargarPersonas);
+console.log("✅ Script cargado correctamente!");
+
 document.getElementById("registroForm").addEventListener("submit", async (e) => {
     e.preventDefault();
     console.log("hola")
@@ -32,14 +32,17 @@ document.getElementById("registroForm").addEventListener("submit", async (e) => 
         alert("Error al registrar persona");
     }
 });
+
 // ✅ Obtener personas y llenar el select
 async function cargarPersonas() {
     try {
-        const res = await fetch(`${backendURL}`);
+        console.log("🔄 Cargando personas...");
+
+        const res = await fetch("https://adeudosback-production.up.railway.app/api/personas");
         if (!res.ok) throw new Error("Error al obtener personas");
 
         const personas = await res.json();
-        console.log("📥 Personas obtenidas:", personas); // 🔥 Agregado para depuración
+        console.log("📥 Personas obtenidas:", personas); // 🔥 Verifica si se están obteniendo los datos
 
         const select = document.getElementById("personaSelect");
         select.innerHTML = ""; // Limpiar el select antes de agregar opciones
@@ -50,11 +53,18 @@ async function cargarPersonas() {
             option.textContent = `${persona.nombre} - $${persona.cantidad}`;
             select.appendChild(option);
         });
+
+        console.log("✅ Personas cargadas en el select.");
     } catch (error) {
         console.error("❌ Error al cargar personas:", error);
     }
 }
 
+// Llamar a la función al cargar la página
+window.addEventListener("DOMContentLoaded", () => {
+    console.log("🚀 Página cargada, ejecutando `cargarPersonas()`...");
+    cargarPersonas();
+});
 
 // ✅ Modificar cantidad y guardar historial
 document.getElementById("modificarBtn").addEventListener("click", async () => {
