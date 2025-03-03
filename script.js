@@ -1,10 +1,10 @@
-const backendURL = "https://adeudosback-production.up.railway.app/api/personas";
-
 console.log("✅ Script cargado correctamente!");
 
+// ✅ Registrar persona
 document.getElementById("registroForm").addEventListener("submit", async (e) => {
     e.preventDefault();
-    console.log("hola")
+    console.log("📥 Intentando registrar persona...");
+
     const nombre = document.getElementById("nombre").value;
     const cantidad = parseFloat(document.getElementById("cantidad").value);
     const fecha = document.getElementById("fecha").value;
@@ -14,7 +14,7 @@ document.getElementById("registroForm").addEventListener("submit", async (e) => 
         return;
     }
 
-    console.log("📤 Enviando datos:", { nombre, cantidad, fecha }); // <-- Verifica que los datos son correctos
+    console.log("📤 Enviando datos:", { nombre, cantidad, fecha });
 
     try {
         const res = await fetch("https://adeudosback-production.up.railway.app/api/personas", {
@@ -25,7 +25,7 @@ document.getElementById("registroForm").addEventListener("submit", async (e) => 
 
         if (!res.ok) throw new Error("Error en la respuesta del servidor");
 
-        alert("Persona registrada exitosamente!");
+        alert("✅ Persona registrada exitosamente!");
         location.reload();
     } catch (error) {
         console.error("❌ Error al registrar:", error);
@@ -37,15 +37,14 @@ document.getElementById("registroForm").addEventListener("submit", async (e) => 
 async function cargarPersonas() {
     try {
         console.log("🔄 Cargando personas...");
-
         const res = await fetch("https://adeudosback-production.up.railway.app/api/personas");
         if (!res.ok) throw new Error("Error al obtener personas");
 
         const personas = await res.json();
-        console.log("📥 Personas obtenidas:", personas); // 🔥 Verifica si se están obteniendo los datos
+        console.log("📥 Personas obtenidas:", personas);
 
         const select = document.getElementById("personaSelect");
-        select.innerHTML = ""; // Limpiar el select antes de agregar opciones
+        select.innerHTML = "";
 
         personas.forEach(persona => {
             const option = document.createElement("option");
@@ -68,6 +67,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
 // ✅ Modificar cantidad y guardar historial
 document.getElementById("modificarBtn").addEventListener("click", async () => {
+    console.log("📥 Intentando modificar persona...");
+
     const id = document.getElementById("personaSelect").value;
     const cantidad = parseFloat(document.getElementById("modCantidad").value);
     const accion = document.getElementById("accion").value;
@@ -78,28 +79,58 @@ document.getElementById("modificarBtn").addEventListener("click", async () => {
         return;
     }
 
-    await fetch(`${backendURL}/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cantidad, accion, fecha }),
-    });
+    console.log("📤 Enviando modificación:", { id, cantidad, accion, fecha });
 
-    alert("Modificación exitosa!");
-    location.reload();
+    try {
+        const res = await fetch(`https://adeudosback-production.up.railway.app/api/personas/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ cantidad, accion, fecha }),
+        });
+
+        if (!res.ok) throw new Error("Error en la respuesta del servidor");
+
+        alert("✅ Modificación exitosa!");
+        location.reload();
+    } catch (error) {
+        console.error("❌ Error al modificar:", error);
+        alert("Error al modificar persona");
+    }
 });
 
 // ✅ Buscar historial por nombre
 document.getElementById("buscarHistorialBtn").addEventListener("click", async () => {
+    console.log("🔎 Buscando historial...");
+
     const nombre = document.getElementById("nombreHistorial").value.trim();
-    const res = await fetch(`${backendURL}/historial/${nombre}`);
-    const modificaciones = await res.json();
+    if (!nombre) {
+        alert("Escribe un nombre para buscar el historial");
+        return;
+    }
 
-    const historialDiv = document.getElementById("historial");
-    historialDiv.innerHTML = "<h3>Historial de Modificaciones</h3>";
+    console.log("📤 Consultando historial de:", nombre);
 
-    modificaciones.forEach(mod => {
-        historialDiv.innerHTML += `<p>${mod.fecha} - ${mod.tipo} $${mod.cantidad}</p>`;
-    });
+    try {
+        const res = await fetch(`https://adeudosback-production.up.railway.app/api/personas/historial/${nombre}`);
+        if (!res.ok) throw new Error("Error en la respuesta del servidor");
+
+        const modificaciones = await res.json();
+        console.log("📜 Historial obtenido:", modificaciones);
+
+        const historialDiv = document.getElementById("historial");
+        historialDiv.innerHTML = "<h3>Historial de Modificaciones</h3>";
+
+        if (modificaciones.length === 0) {
+            historialDiv.innerHTML += "<p>No hay modificaciones registradas para esta persona.</p>";
+        } else {
+            modificaciones.forEach(mod => {
+                historialDiv.innerHTML += `<p>${mod.fecha} - ${mod.tipo} $${mod.cantidad}</p>`;
+            });
+        }
+
+        console.log("✅ Historial cargado correctamente.");
+    } catch (error) {
+        console.error("❌ Error al obtener historial:", error);
+        alert("Error al obtener historial");
+    }
 });
-
-
