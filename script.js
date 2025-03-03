@@ -97,14 +97,29 @@ document.getElementById("modificarBtn").addEventListener("click", async () => {
     // ✅ 2️⃣ Guardar en historial
     console.log("📤 Guardando en historial:", { nombre, tipo: accion, cantidad, fecha });
 
-    await fetch(`https://adeudosback-production.up.railway.app/api/personas/historial`, {
+    try {
+        const res = await fetch("https://adeudosback-production.up.railway.app/api/personas", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nombre, tipo: accion, cantidad, fecha })
+        });
+
+        if (!res.ok) throw new Error("Error en la respuesta del servidor");
+
+        alert("✅ Historial registrada exitosamente!");
+        location.reload();
+    } catch (error) {
+        console.error("❌ Error al registrar:", error);
+        alert("Error al registrar historial");
+    }
+   /* await fetch(`https://adeudosback-production.up.railway.app/api/personas`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nombre, tipo: accion, cantidad, fecha })
     });
 
     alert("Modificación guardada en historial!");
-    location.reload();
+    location.reload();*/
 });
 
 
