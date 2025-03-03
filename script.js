@@ -84,5 +84,34 @@ document.getElementById("modificarBtn").addEventListener("click", async () => {
     }
 });
 
+async function cargarHistorial() {
+    const id = document.getElementById("personaSelect").value;
+    if (!id) return;
+
+    try {
+        const res = await fetch(`https://adeudosback-production.up.railway.app/api/personas/${id}/modificaciones`);
+        const modificaciones = await res.json();
+
+        const historialDiv = document.getElementById("historial");
+        historialDiv.innerHTML = "<h3>Historial de Modificaciones</h3>";
+
+        if (modificaciones.length === 0) {
+            historialDiv.innerHTML += "<p>No hay modificaciones registradas.</p>";
+            return;
+        }
+
+        modificaciones.forEach(mod => {
+            const modTexto = document.createElement("p");
+            modTexto.textContent = `${mod.fecha}: ${mod.accion} $${mod.cantidad}`;
+            historialDiv.appendChild(modTexto);
+        });
+    } catch (error) {
+        console.error("Error al obtener historial:", error);
+    }
+}
+
+// Cargar historial cada vez que se seleccione una persona
+document.getElementById("personaSelect").addEventListener("change", cargarHistorial);
+
 // Cargar la lista de personas al cargar la página
 window.onload = cargarPersonas;
